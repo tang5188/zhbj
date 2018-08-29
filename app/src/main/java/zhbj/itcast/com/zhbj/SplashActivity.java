@@ -11,6 +11,8 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
+import zhbj.itcast.com.zhbj.utils.PrefUtils;
+
 public class SplashActivity extends Activity {
 
     @Override
@@ -48,7 +50,16 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                startActivity(new Intent(getApplicationContext(), GuideActivity.class));
+                //动画结束
+                //判断有没有展示过新手引导页
+                boolean isGuideShow = PrefUtils.getBoolean(getApplicationContext(), "is_guide_show", false);
+                if (!isGuideShow) {
+                    //跳到新手引导页
+                    startActivity(new Intent(getApplicationContext(), GuideActivity.class));
+                } else {
+                    //跳到主页面
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
                 finish();
             }
 

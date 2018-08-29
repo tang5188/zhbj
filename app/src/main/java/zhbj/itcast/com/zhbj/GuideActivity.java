@@ -1,25 +1,29 @@
 package zhbj.itcast.com.zhbj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
+import zhbj.itcast.com.zhbj.utils.PrefUtils;
+
 public class GuideActivity extends Activity {
 
     private ViewPager mViewPager;
     private LinearLayout llContainer;
     private ImageView ivRedPoint;
+    private Button btnStart;
 
     private int[] mImageIds = new int[]{R.mipmap.guide_1, R.mipmap.guide_2, R.mipmap.guide_3};
     private ArrayList<ImageView> mImageViews;
@@ -39,6 +43,7 @@ public class GuideActivity extends Activity {
         mViewPager = findViewById(R.id.vp_guide);
         llContainer = findViewById(R.id.ll_container);
         ivRedPoint = findViewById(R.id.iv_red_point);
+        btnStart = findViewById(R.id.btn_Start);
     }
 
     private void initData() {
@@ -73,6 +78,11 @@ public class GuideActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
+                if (position == mImageIds.length - 1) {
+                    btnStart.setVisibility(View.VISIBLE);
+                } else {
+                    btnStart.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -92,6 +102,18 @@ public class GuideActivity extends Activity {
                         llContainer.getChildAt(0).getLeft();
                 //移除观察者
                 ivRedPoint.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
+
+        //开始体验按钮点击
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //在sp中记录访问过引导页的状态
+                PrefUtils.putBoolean(getApplicationContext(), "is_guide_show", true);
+                //跳到主页面
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
             }
         });
     }

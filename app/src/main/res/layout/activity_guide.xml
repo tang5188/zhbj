@@ -24,6 +24,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="开始体验"
+        android:visibility="invisible"
         android:textColor="@color/txt_guide_selector" />
 
     <RelativeLayout
