@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -17,9 +18,12 @@ public class GuideActivity extends Activity {
 
     private ViewPager mViewPager;
     private LinearLayout llContainer;
+    private ImageView ivRedPoint;
 
     private int[] mImageIds = new int[]{R.mipmap.guide_1, R.mipmap.guide_2, R.mipmap.guide_3};
     private ArrayList<ImageView> mImageViews;
+
+    private int mPointDis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class GuideActivity extends Activity {
     private void initViews() {
         mViewPager = findViewById(R.id.vp_guide);
         llContainer = findViewById(R.id.ll_container);
+        ivRedPoint = findViewById(R.id.iv_red_point);
     }
 
     private void initData() {
@@ -62,12 +67,25 @@ public class GuideActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
+        });
 
+        //监听layout执行结束的事件，一旦结束之后，执行测量逻辑
+        //视图树
+        ivRedPoint.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            //一旦视图树Layout方法调用完成，就会回调此方法
+            @Override
+            public void onGlobalLayout() {
+                //布局位置已经确定，可以拿到位置信息了
+                //计算圆点移动距离
+                mPointDis = llContainer.getChildAt(1).getLeft() -
+                        llContainer.getChildAt(0).getLeft();
+                //移除观察者
+                ivRedPoint.getViewTreeObserver().removeGlobalOnLayoutListener(this);
             }
         });
     }
