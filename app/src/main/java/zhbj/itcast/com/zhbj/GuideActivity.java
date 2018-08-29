@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -62,7 +63,12 @@ public class GuideActivity extends Activity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.e("Guide", "当前位置：" + position + ", 偏移：" + positionOffset);
+                //通过修改小红点的左边距，设定小红点的位置
+                int leftMargin = (int) (mPointDis * positionOffset + position * mPointDis + 0.5f);
+                //获取小红点的布局参数
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivRedPoint.getLayoutParams();
+                params.leftMargin = leftMargin;
+                ivRedPoint.setLayoutParams(params);
             }
 
             @Override
