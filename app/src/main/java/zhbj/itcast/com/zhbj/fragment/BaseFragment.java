@@ -14,7 +14,7 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment {
 
-    private Activity mActivity; //当作Context去使用
+    public Activity mActivity; //当作Context去使用
     public View mRootView;      //fragment的根布局
 
     //fragment创建
