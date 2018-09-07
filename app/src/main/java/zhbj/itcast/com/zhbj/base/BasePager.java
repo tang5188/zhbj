@@ -16,7 +16,7 @@ import zhbj.itcast.com.zhbj.R;
 public class BasePager {
 
     public Activity mActivity;
-    private View mRootView;
+    public View mRootView;
 
     public TextView tvTitle;
     public ImageButton btnMenu;

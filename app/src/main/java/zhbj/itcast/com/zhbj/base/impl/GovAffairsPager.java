@@ -24,5 +24,7 @@ public class GovAffairsPager extends BasePager {
         view.setGravity(Gravity.CENTER);    //居中显示
         view.setText("政务");
         flContainer.addView(view);      //给帧布局添加对象
+        //修改标题
+        tvTitle.setText("政务");
     }
 }

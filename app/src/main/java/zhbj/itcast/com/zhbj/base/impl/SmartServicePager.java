@@ -24,5 +24,7 @@ public class SmartServicePager extends BasePager {
         view.setGravity(Gravity.CENTER);    //居中显示
         view.setText("智慧服务");
         flContainer.addView(view);      //给帧布局添加对象
+        //修改标题
+        tvTitle.setText("生活");
     }
 }

@@ -24,5 +24,7 @@ public class SettingPager extends BasePager {
         view.setGravity(Gravity.CENTER);    //居中显示
         view.setText("设置");
         flContainer.addView(view);      //给帧布局添加对象
+        //修改标题
+        tvTitle.setText("设置");
     }
 }
