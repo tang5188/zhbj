@@ -5,6 +5,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
+
+import org.xutils.ViewInjector;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 
@@ -23,14 +28,18 @@ import static android.view.View.*;
  * 主页面的fragment
  */
 public class ContentFragment extends BaseFragment {
-
+    @ViewInject(R.id.vp_content)
     private NoScrollViewPager mViewPager;
+    @ViewInject(R.id.rg_group)
+    private RadioGroup rgGroup;
+
     private ArrayList<BasePager> mList;     //5个标签页的集合
 
     @Override
     public View initView() {
         View view = inflate(mActivity, R.layout.fragment_content, null);
         mViewPager = view.findViewById(R.id.vp_content);
+        rgGroup = view.findViewById(R.id.rg_group);
         return view;
     }
 
