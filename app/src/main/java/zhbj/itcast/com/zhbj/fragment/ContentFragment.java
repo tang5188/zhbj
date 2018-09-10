@@ -15,6 +15,7 @@ import zhbj.itcast.com.zhbj.base.impl.HomePager;
 import zhbj.itcast.com.zhbj.base.impl.NewsCenterPager;
 import zhbj.itcast.com.zhbj.base.impl.SettingPager;
 import zhbj.itcast.com.zhbj.base.impl.SmartServicePager;
+import zhbj.itcast.com.zhbj.view.NoScrollViewPager;
 
 import static android.view.View.*;
 
@@ -23,7 +24,7 @@ import static android.view.View.*;
  */
 public class ContentFragment extends BaseFragment {
 
-    private ViewPager mViewPager;
+    private NoScrollViewPager mViewPager;
     private ArrayList<BasePager> mList;     //5个标签页的集合
 
     @Override
