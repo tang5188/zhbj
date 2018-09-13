@@ -17,6 +17,7 @@ public class HomePager extends BasePager {
 
     @Override
     public void InitData() {
+        System.out.println("首页初始化");
         //给空的帧布局添加布局对象
         TextView view = new TextView(mActivity);
         view.setTextSize(22);

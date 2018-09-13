@@ -83,6 +83,26 @@ public class ContentFragment extends BaseFragment {
                 }
             }
         });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                //在此处初始化页面数据
+                BasePager pager = mList.get(position);
+                pager.InitData();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        //手动初始化第一个页面的数据
+        mList.get(0).InitData();
     }
 
     class ContentAdapter extends PagerAdapter {
@@ -102,7 +122,10 @@ public class ContentFragment extends BaseFragment {
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             //获取当前页面的对象
             BasePager pager = mList.get(position);
-            pager.InitData();
+
+            //默认情况下，viewPager会自动初始化下一个页面，性能不佳，所以不在此处初始化数据
+            //pager.InitData();
+
             //布局对象
             //pager.mRootView：当前页面的根布局
             container.addView(pager.mRootView);
