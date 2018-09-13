@@ -53,6 +53,36 @@ public class ContentFragment extends BaseFragment {
         mList.add(new GovAffairsPager(mActivity));
         mList.add(new SettingPager(mActivity));
         mViewPager.setAdapter(new ContentAdapter());
+
+        rgGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    //首页
+                    case R.id.rb_home:
+                        mViewPager.setCurrentItem(0, false);    //false:去掉页面平滑的动画
+                        break;
+                    //新闻
+                    case R.id.rb_news:
+                        mViewPager.setCurrentItem(1, false);
+                        break;
+                    //智慧服务
+                    case R.id.rb_smart:
+                        mViewPager.setCurrentItem(2, false);
+                        break;
+                    //政务
+                    case R.id.rb_gov:
+                        mViewPager.setCurrentItem(3, false);
+                        break;
+                    //设置
+                    case R.id.rb_setting:
+                        mViewPager.setCurrentItem(4, false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     class ContentAdapter extends PagerAdapter {
