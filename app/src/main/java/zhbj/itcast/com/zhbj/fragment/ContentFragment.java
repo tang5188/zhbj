@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
-import org.xutils.ViewInjector;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 
+import zhbj.itcast.com.zhbj.MainActivity;
 import zhbj.itcast.com.zhbj.R;
 import zhbj.itcast.com.zhbj.base.BasePager;
 import zhbj.itcast.com.zhbj.base.impl.GovAffairsPager;
@@ -94,6 +95,14 @@ public class ContentFragment extends BaseFragment {
                 //在此处初始化页面数据
                 BasePager pager = mList.get(position);
                 pager.InitData();
+
+                if (position == 0 || position == mList.size() - 1) {
+                    //首页和设置页，禁用侧边栏
+                    setSlidingMenuEnable(false);
+                } else {
+                    //启用侧边栏
+                    setSlidingMenuEnable(true);
+                }
             }
 
             @Override
@@ -103,6 +112,21 @@ public class ContentFragment extends BaseFragment {
         });
         //手动初始化第一个页面的数据
         mList.get(0).InitData();
+        //手动禁用第一个页面的侧边栏
+        setSlidingMenuEnable(false);
+    }
+
+    //开启或者禁用侧边栏
+    private void setSlidingMenuEnable(boolean enable) {
+        //获取SlidingMenu的对象
+        //获取MainActivity对象
+        MainActivity mainUi = (MainActivity) mActivity;
+        SlidingMenu slidingMenu = mainUi.getSlidingMenu();
+        if (enable) {
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        } else {
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        }
     }
 
     class ContentAdapter extends PagerAdapter {
