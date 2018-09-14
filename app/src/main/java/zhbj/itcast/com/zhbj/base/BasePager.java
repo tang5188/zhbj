@@ -6,6 +6,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
+import zhbj.itcast.com.zhbj.MainActivity;
 import zhbj.itcast.com.zhbj.R;
 
 /**
@@ -33,7 +36,22 @@ public class BasePager {
         tvTitle = view.findViewById(R.id.tv_title);
         btnMenu = view.findViewById(R.id.btn_menu);
         flContainer = view.findViewById(R.id.fl_container);
+
+        //点击侧边栏按钮，控制侧边栏开关
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggle();
+            }
+        });
+
         return view;
+    }
+
+    private void toggle() {
+        MainActivity mainUI = (MainActivity) mActivity;
+        SlidingMenu slidingMenu = mainUI.getSlidingMenu();
+        slidingMenu.toggle();
     }
 
     //初始化数据
