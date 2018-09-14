@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import zhbj.itcast.com.zhbj.MainActivity;
 import zhbj.itcast.com.zhbj.R;
+import zhbj.itcast.com.zhbj.base.impl.NewsCenterPager;
 import zhbj.itcast.com.zhbj.domain.NewsMenu;
 
 /**
@@ -54,8 +55,20 @@ public class LeftMenuFragment extends BaseFragment {
 
                 //收回侧边栏
                 toggle();
+
+                setMenuDetailPager(position);
             }
         });
+    }
+
+    //修改菜单详情页
+    private void setMenuDetailPager(int position) {
+        //修改新闻中心的帧布局
+        //获取新闻中心的对象
+        MainActivity mainUI = (MainActivity) mActivity;
+        ContentFragment fragment = mainUI.getContentFragment();
+        NewsCenterPager pager = fragment.getNewsCenterPager();
+        pager.setMenuDetailPager(position);
     }
 
     private void toggle() {

@@ -84,4 +84,9 @@ public class NewsCenterPager extends BasePager {
         LeftMenuFragment fragment = mainUI.getLeftMenuFragment();
         fragment.setMenuData(newsMenu.data);
     }
+
+    //修改菜单详情页
+    public void setMenuDetailPager(int position) {
+        System.out.println("新闻中心要修改菜单详情页：" + position);
+    }
 }
