@@ -1,10 +1,13 @@
 package zhbj.itcast.com.zhbj.base.impl;
 
 import android.app.Activity;
+import android.drm.ProcessedData;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import org.xutils.HttpManager;
 import org.xutils.common.Callback;
@@ -12,6 +15,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import zhbj.itcast.com.zhbj.base.BasePager;
+import zhbj.itcast.com.zhbj.domain.NewsMenu;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
 
 /**
@@ -46,6 +50,7 @@ public class NewsCenterPager extends BasePager {
             @Override
             public void onSuccess(String result) {
                 System.out.println("get category list success：" + result);
+                processData(result);
             }
 
             @Override
@@ -63,5 +68,13 @@ public class NewsCenterPager extends BasePager {
                 System.out.println("get category list finished");
             }
         });
+    }
+
+    //解析数据
+    private void processData(String json) {
+        Gson gson = new Gson();
+        //通过json和对象类，生成一个对象
+        NewsMenu newsMenu = gson.fromJson(json, NewsMenu.class);
+        System.out.println(newsMenu.toString());
     }
 }
