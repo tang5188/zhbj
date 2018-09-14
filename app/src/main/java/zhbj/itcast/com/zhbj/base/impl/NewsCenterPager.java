@@ -14,8 +14,10 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import zhbj.itcast.com.zhbj.MainActivity;
 import zhbj.itcast.com.zhbj.base.BasePager;
 import zhbj.itcast.com.zhbj.domain.NewsMenu;
+import zhbj.itcast.com.zhbj.fragment.LeftMenuFragment;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
 
 /**
@@ -75,6 +77,11 @@ public class NewsCenterPager extends BasePager {
         Gson gson = new Gson();
         //通过json和对象类，生成一个对象
         NewsMenu newsMenu = gson.fromJson(json, NewsMenu.class);
-        System.out.println(newsMenu.toString());
+        System.out.println("解析结果：" + newsMenu);
+
+        //找到侧边栏对象
+        MainActivity mainUI = (MainActivity) mActivity;
+        LeftMenuFragment fragment = mainUI.getLeftMenuFragment();
+        fragment.setMenuData(newsMenu.data);
     }
 }
