@@ -14,8 +14,16 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import zhbj.itcast.com.zhbj.MainActivity;
+import zhbj.itcast.com.zhbj.base.BaseMenuDetailPager;
 import zhbj.itcast.com.zhbj.base.BasePager;
+import zhbj.itcast.com.zhbj.base.impl.menudetail.InteractMenuDetailPager;
+import zhbj.itcast.com.zhbj.base.impl.menudetail.NewsMenuDetailPager;
+import zhbj.itcast.com.zhbj.base.impl.menudetail.PhotosMenuDetailPager;
+import zhbj.itcast.com.zhbj.base.impl.menudetail.TopicMenuDetailPager;
 import zhbj.itcast.com.zhbj.domain.NewsMenu;
 import zhbj.itcast.com.zhbj.fragment.LeftMenuFragment;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
@@ -24,6 +32,9 @@ import zhbj.itcast.com.zhbj.global.GlobalConstants;
  * 新闻中心
  */
 public class NewsCenterPager extends BasePager {
+
+    private ArrayList<BaseMenuDetailPager> mPagers;
+
     public NewsCenterPager(Activity activity) {
         super(activity);
     }
@@ -31,15 +42,18 @@ public class NewsCenterPager extends BasePager {
     @Override
     public void InitData() {
         System.out.println("新闻中心初始化");
-        //给空的帧布局添加布局对象
-        TextView view = new TextView(mActivity);
-        view.setTextSize(22);
-        view.setTextColor(Color.RED);
-        view.setGravity(Gravity.CENTER);    //居中显示
-        view.setText("新闻中心");
-        flContainer.addView(view);      //给帧布局添加对象
-        //修改标题
-        tvTitle.setText("新闻");
+
+        //没有必要，后续直接替换为新闻、专题、组图、互动等页
+//        //给空的帧布局添加布局对象
+//        TextView view = new TextView(mActivity);
+//        view.setTextSize(22);
+//        view.setTextColor(Color.RED);
+//        view.setGravity(Gravity.CENTER);    //居中显示
+//        view.setText("新闻中心");
+//        flContainer.addView(view);      //给帧布局添加对象
+//        //修改标题
+//        tvTitle.setText("新闻");
+
         //从服务器获取数据
         getDataFromServer();
     }
@@ -83,10 +97,27 @@ public class NewsCenterPager extends BasePager {
         MainActivity mainUI = (MainActivity) mActivity;
         LeftMenuFragment fragment = mainUI.getLeftMenuFragment();
         fragment.setMenuData(newsMenu.data);
+
+        //网络请求成功之后，初始化四个菜单详情页
+        mPagers = new ArrayList<BaseMenuDetailPager>();
+        mPagers.add(new NewsMenuDetailPager(mActivity));
+        mPagers.add(new TopicMenuDetailPager(mActivity));
+        mPagers.add(new PhotosMenuDetailPager(mActivity));
+        mPagers.add(new InteractMenuDetailPager(mActivity));
+        //设置新闻菜单详情页为默认页面
+        setMenuDetailPager(0);
     }
 
     //修改菜单详情页
     public void setMenuDetailPager(int position) {
         System.out.println("新闻中心要修改菜单详情页：" + position);
+
+        //清除之前帧布局显示的内容
+        flContainer.removeAllViews();
+        BaseMenuDetailPager pager = mPagers.get(position);
+        //修改当前帧布局显示的内容
+        flContainer.addView(pager.mRootView);
+        //初始化当前页面的数据
+        pager.initData();
     }
 }
