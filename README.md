@@ -4,9 +4,11 @@
 
 网盘路径：Stuty\学习视频\android 智慧北京视频\
 
+<br>
+<br>
 
 ###### 备注：
 
     1.解说视频使用Eclipse，学习代码使用Android Studio
     
-    2.解说视频使用的xUtils版本为3.0以下，学习代码使用xUtilis3，此框架改动源码较大
+    2.解说视频使用的xUtils版本为3.0以下，学习代码使用xUtils3，此框架改动源码较大
