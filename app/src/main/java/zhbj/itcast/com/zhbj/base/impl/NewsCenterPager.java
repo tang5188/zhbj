@@ -4,8 +4,15 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.xutils.HttpManager;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import zhbj.itcast.com.zhbj.base.BasePager;
+import zhbj.itcast.com.zhbj.global.GlobalConstants;
 
 /**
  * 新闻中心
@@ -27,5 +34,34 @@ public class NewsCenterPager extends BasePager {
         flContainer.addView(view);      //给帧布局添加对象
         //修改标题
         tvTitle.setText("新闻");
+        //从服务器获取数据
+        getDataFromServer();
+    }
+
+    //从服务器获取数据
+    //  需要添加网络权限
+    private void getDataFromServer() {
+        x.http().get(new RequestParams(GlobalConstants.CATEGORY_URL), new Callback.CommonCallback<String>() {
+
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("get category list success：" + result);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(mActivity, "get category list error:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Toast.makeText(mActivity, "get category list cancel:" + cex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinished() {
+                System.out.println("get category list finished");
+            }
+        });
     }
 }
