@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.xutils.view.annotation.Event;
@@ -17,6 +18,7 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 
+import zhbj.itcast.com.zhbj.MainActivity;
 import zhbj.itcast.com.zhbj.R;
 import zhbj.itcast.com.zhbj.base.BaseMenuDetailPager;
 import zhbj.itcast.com.zhbj.base.impl.TabDetailPager;
@@ -28,7 +30,7 @@ import zhbj.itcast.com.zhbj.domain.NewsMenu;
  * 2.关联ViewPager与Indicator： mIndicator.setViewPager(mViewPager)
  * 3.重写PagerAdapter的getPageTitle方法
  */
-public class NewsMenuDetailPager extends BaseMenuDetailPager {
+public class NewsMenuDetailPager extends BaseMenuDetailPager implements ViewPager.OnPageChangeListener {
 
     @ViewInject(R.id.vp_news_menu_detail)
     private ViewPager mViewPager;
@@ -72,6 +74,32 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
         mViewPager.setAdapter(new NewsMenuDetailAdapter());
         //将viewPager与indicator关联（必须在setAdapter方法后调用）
         mIndicator.setViewPager(mViewPager);
+
+        //当viewPager和Indicator绑定时，PageChange应该设定给Indicator
+        //mViewPager.addOnPageChangeListener(this);
+        mIndicator.setOnPageChangeListener(this);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        System.out.println("当前页签：" + position);
+        if (position == 0) {
+            //打开侧边栏
+            setSlidingMenuEnable(true);
+        } else {
+            //禁用侧边栏
+            setSlidingMenuEnable(false);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     class NewsMenuDetailAdapter extends PagerAdapter {
@@ -114,5 +142,18 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
         //跳到下一个页面
         int currentPos = mViewPager.getCurrentItem();
         mViewPager.setCurrentItem(++currentPos);
+    }
+
+    //开启或者禁用侧边栏
+    private void setSlidingMenuEnable(boolean enable) {
+        //获取SlidingMenu的对象
+        //获取MainActivity对象
+        MainActivity mainUi = (MainActivity) mActivity;
+        SlidingMenu slidingMenu = mainUi.getSlidingMenu();
+        if (enable) {
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        } else {
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        }
     }
 }
