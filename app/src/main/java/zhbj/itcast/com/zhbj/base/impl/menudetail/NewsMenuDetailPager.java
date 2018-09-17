@@ -1,22 +1,20 @@
 package zhbj.itcast.com.zhbj.base.impl.menudetail;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.viewpagerindicator.TabPageIndicator;
 
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import zhbj.itcast.com.zhbj.R;
@@ -26,9 +24,9 @@ import zhbj.itcast.com.zhbj.domain.NewsMenu;
 
 /**
  * ViewPagerIndicator
- *  1.引入：ViewPagerIndicator
- *  2.关联ViewPager与Indicator： mIndicator.setViewPager(mViewPager)
- *  3.重写PagerAdapter的getPageTitle方法
+ * 1.引入：ViewPagerIndicator
+ * 2.关联ViewPager与Indicator： mIndicator.setViewPager(mViewPager)
+ * 3.重写PagerAdapter的getPageTitle方法
  */
 public class NewsMenuDetailPager extends BaseMenuDetailPager {
 
@@ -36,6 +34,8 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
     private ViewPager mViewPager;
     @ViewInject(R.id.indicator)
     private TabPageIndicator mIndicator;
+    @ViewInject(R.id.btn_Next)
+    private ImageButton btnNext;
 
     private ArrayList<NewsMenu.NewsTabData> children;
 
@@ -107,5 +107,12 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
         public CharSequence getPageTitle(int position) {
             return children.get(position).title;
         }
+    }
+
+    @Event(type = View.OnClickListener.class, value = R.id.btn_Next)  //通过注解的方式绑定方法
+    private void nextPage(View view) {
+        //跳到下一个页面
+        int currentPos = mViewPager.getCurrentItem();
+        mViewPager.setCurrentItem(++currentPos);
     }
 }
