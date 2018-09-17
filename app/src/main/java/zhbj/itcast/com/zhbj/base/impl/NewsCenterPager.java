@@ -118,7 +118,8 @@ public class NewsCenterPager extends BasePager {
 
         //网络请求成功之后，初始化四个菜单详情页
         mPagers = new ArrayList<BaseMenuDetailPager>();
-        mPagers.add(new NewsMenuDetailPager(mActivity));
+        mPagers.add(new NewsMenuDetailPager(mActivity,
+                newsMenu.data.get(0).children));    //通过构造方法传递数据
         mPagers.add(new TopicMenuDetailPager(mActivity));
         mPagers.add(new PhotosMenuDetailPager(mActivity));
         mPagers.add(new InteractMenuDetailPager(mActivity));
