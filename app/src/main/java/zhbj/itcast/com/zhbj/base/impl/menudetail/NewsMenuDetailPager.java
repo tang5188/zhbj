@@ -3,12 +3,15 @@ package zhbj.itcast.com.zhbj.base.impl.menudetail;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.viewpagerindicator.TabPageIndicator;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -21,10 +24,18 @@ import zhbj.itcast.com.zhbj.base.BaseMenuDetailPager;
 import zhbj.itcast.com.zhbj.base.impl.TabDetailPager;
 import zhbj.itcast.com.zhbj.domain.NewsMenu;
 
+/**
+ * ViewPagerIndicator
+ *  1.引入：ViewPagerIndicator
+ *  2.关联ViewPager与Indicator： mIndicator.setViewPager(mViewPager)
+ *  3.重写PagerAdapter的getPageTitle方法
+ */
 public class NewsMenuDetailPager extends BaseMenuDetailPager {
 
     @ViewInject(R.id.vp_news_menu_detail)
     private ViewPager mViewPager;
+    @ViewInject(R.id.indicator)
+    private TabPageIndicator mIndicator;
 
     private ArrayList<NewsMenu.NewsTabData> children;
 
@@ -59,6 +70,8 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
             mPagers.add(pager);
         }
         mViewPager.setAdapter(new NewsMenuDetailAdapter());
+        //将viewPager与indicator关联（必须在setAdapter方法后调用）
+        mIndicator.setViewPager(mViewPager);
     }
 
     class NewsMenuDetailAdapter extends PagerAdapter {
@@ -87,6 +100,12 @@ public class NewsMenuDetailPager extends BaseMenuDetailPager {
         @Override
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView((View) object);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return children.get(position).title;
         }
     }
 }

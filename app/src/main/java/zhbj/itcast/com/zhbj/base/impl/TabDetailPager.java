@@ -41,6 +41,6 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
     @Override
     public void initData() {
-        view.setText(newsTabData.title);    //膝盖当前布局数据
+        view.setText(newsTabData.title);    //修改当前布局数据
     }
 }

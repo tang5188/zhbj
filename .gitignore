@@ -10,3 +10,5 @@
 .externalNativeBuild
 .idea/
 slidingMenuLib/build/
+import-summary.txt
+viewPagerIndicator/build/
