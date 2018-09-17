@@ -3,6 +3,7 @@ package zhbj.itcast.com.zhbj.base.impl;
 import android.app.Activity;
 import android.drm.ProcessedData;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import zhbj.itcast.com.zhbj.base.impl.menudetail.TopicMenuDetailPager;
 import zhbj.itcast.com.zhbj.domain.NewsMenu;
 import zhbj.itcast.com.zhbj.fragment.LeftMenuFragment;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
+import zhbj.itcast.com.zhbj.utils.CacheUtils;
 
 /**
  * 新闻中心
@@ -55,7 +57,19 @@ public class NewsCenterPager extends BasePager {
 //        //修改标题
 //        tvTitle.setText("新闻");
 
-        //从服务器获取数据
+        String cache = CacheUtils.getCache(mActivity, GlobalConstants.CATEGORY_URL);
+        if (!TextUtils.isEmpty(cache)) {
+            System.out.println("发现缓存数据...");
+            //有缓存
+            processData(cache);
+        }
+//        else {
+//            System.out.println("从服务器获取数据...");
+//            //从服务器获取数据
+//            getDataFromServer();
+//        }
+
+        //继续请求服务器数据，保证缓存最新
         getDataFromServer();
     }
 
@@ -68,6 +82,9 @@ public class NewsCenterPager extends BasePager {
             public void onSuccess(String result) {
                 System.out.println("get category list success：" + result);
                 processData(result);
+
+                //写缓存
+                CacheUtils.setCache(mActivity, GlobalConstants.CATEGORY_URL, result);
             }
 
             @Override
