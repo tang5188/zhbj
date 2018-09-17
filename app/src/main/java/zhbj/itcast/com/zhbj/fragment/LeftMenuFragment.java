@@ -42,6 +42,8 @@ public class LeftMenuFragment extends BaseFragment {
     //通过此方法，可以从新闻中心将网络数据传递过来
     public void setMenuData(ArrayList<NewsMenu.NewsMenuData> data) {
         System.out.println("侧边栏拿到的数量：" + data.size());
+        //将当前选中位置归0，避免菜单栏选中位置不同步
+        mCurrentPos=0;
         this.data = data;
 
         final LeftMenuAdapter mAdapter = new LeftMenuAdapter();

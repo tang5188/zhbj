@@ -34,6 +34,7 @@ import zhbj.itcast.com.zhbj.global.GlobalConstants;
 public class NewsCenterPager extends BasePager {
 
     private ArrayList<BaseMenuDetailPager> mPagers;
+    private NewsMenu newsMenu;
 
     public NewsCenterPager(Activity activity) {
         super(activity);
@@ -90,7 +91,7 @@ public class NewsCenterPager extends BasePager {
     private void processData(String json) {
         Gson gson = new Gson();
         //通过json和对象类，生成一个对象
-        NewsMenu newsMenu = gson.fromJson(json, NewsMenu.class);
+        newsMenu = gson.fromJson(json, NewsMenu.class);
         System.out.println("解析结果：" + newsMenu);
 
         //找到侧边栏对象
@@ -119,5 +120,8 @@ public class NewsCenterPager extends BasePager {
         flContainer.addView(pager.mRootView);
         //初始化当前页面的数据
         pager.initData();
+
+        //修改标题栏
+        tvTitle.setText(newsMenu.data.get(position).title);
     }
 }
