@@ -46,17 +46,6 @@ public class NewsCenterPager extends BasePager {
     public void InitData() {
         System.out.println("新闻中心初始化");
 
-        //没有必要，后续直接替换为新闻、专题、组图、互动等页
-//        //给空的帧布局添加布局对象
-//        TextView view = new TextView(mActivity);
-//        view.setTextSize(22);
-//        view.setTextColor(Color.RED);
-//        view.setGravity(Gravity.CENTER);    //居中显示
-//        view.setText("新闻中心");
-//        flContainer.addView(view);      //给帧布局添加对象
-//        //修改标题
-//        tvTitle.setText("新闻");
-
         String cache = CacheUtils.getCache(mActivity, GlobalConstants.CATEGORY_URL);
         if (!TextUtils.isEmpty(cache)) {
             System.out.println("发现缓存数据...");

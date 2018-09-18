@@ -29,7 +29,6 @@ public class LeftMenuFragment extends BaseFragment {
 
     private ArrayList<NewsMenu.NewsMenuData> data;  //分类的网络数据
 
-
     private int mCurrentPos;    //当前选中的菜单位置
 
     @Override

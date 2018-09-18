@@ -5,6 +5,7 @@ import android.drm.ProcessedData;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import zhbj.itcast.com.zhbj.base.BaseMenuDetailPager;
 import zhbj.itcast.com.zhbj.domain.NewsMenu;
 import zhbj.itcast.com.zhbj.domain.NewsTab;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
+import zhbj.itcast.com.zhbj.utils.CacheUtils;
 
 /**
  * 页签详情页：北京/中国/国际……
@@ -30,6 +32,7 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
     //当前页签的网络数据
     private NewsMenu.NewsTabData newsTabData;
+    private String mUrl;
 
     @ViewInject(R.id.vp_tab_detail)
     private ViewPager mViewPager;
@@ -37,6 +40,7 @@ public class TabDetailPager extends BaseMenuDetailPager {
     public TabDetailPager(Activity activity, NewsMenu.NewsTabData newsTabData) {
         super(activity);
         this.newsTabData = newsTabData;
+        mUrl = GlobalConstants.SERVER_URL + newsTabData.url;
     }
 
     @Override
@@ -49,15 +53,21 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
     @Override
     public void initData() {
+        String cache = CacheUtils.getCache(mActivity, mUrl);
+        if (TextUtils.isEmpty(cache)) {
+            processData(cache);
+        }
         getDataFromServer();
     }
 
+    //请求服务器获取页签详细数据
     private void getDataFromServer() {
-        x.http().get(new RequestParams(GlobalConstants.SERVER_URL + newsTabData.url), new Callback.CommonCallback<String>() {
+        x.http().get(new RequestParams(mUrl), new Callback.CommonCallback<String>() {
 
             @Override
             public void onSuccess(String result) {
                 processData(result);
+                CacheUtils.setCache(mActivity, mUrl, result);
             }
 
             @Override
@@ -77,12 +87,14 @@ public class TabDetailPager extends BaseMenuDetailPager {
         });
     }
 
+    //解析数据
     private void processData(String result) {
         Gson gson = new Gson();
         NewsTab newsTab = gson.fromJson(result, NewsTab.class);
         System.out.println("newsTab:" + newsTab);
     }
 
+    //头条新闻的数据解析适配器
     class TopNewsAdapter extends PagerAdapter {
 
         @Override
