@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
+    <zhbj.itcast.com.zhbj.view.TopNewsViewPager
         android:id="@+id/vp_tab_detail"
         android:layout_width="match_parent"
         android:layout_height="180dp">
 
-    </android.support.v4.view.ViewPager>
+    </zhbj.itcast.com.zhbj.view.TopNewsViewPager>
 
 </LinearLayout>

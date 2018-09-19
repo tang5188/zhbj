@@ -27,6 +27,7 @@ import zhbj.itcast.com.zhbj.domain.NewsMenu;
 import zhbj.itcast.com.zhbj.domain.NewsTab;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
 import zhbj.itcast.com.zhbj.utils.CacheUtils;
+import zhbj.itcast.com.zhbj.view.TopNewsViewPager;
 
 /**
  * 页签详情页：北京/中国/国际……
@@ -40,7 +41,7 @@ public class TabDetailPager extends BaseMenuDetailPager {
     private String mUrl;
 
     @ViewInject(R.id.vp_tab_detail)
-    private ViewPager mViewPager;
+    private TopNewsViewPager mViewPager;
 
     public TabDetailPager(Activity activity, NewsMenu.NewsTabData newsTabData) {
         super(activity);
