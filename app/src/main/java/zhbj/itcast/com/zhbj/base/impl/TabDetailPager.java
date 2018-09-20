@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -45,6 +46,8 @@ public class TabDetailPager extends BaseMenuDetailPager {
     private TopNewsViewPager mViewPager;
     @ViewInject(R.id.tv_title)
     private TextView tvTitle;
+    @ViewInject(R.id.indicator)
+    private CirclePageIndicator mIndicator;
 
     public TabDetailPager(Activity activity, NewsMenu.NewsTabData newsTabData) {
         super(activity);
@@ -107,7 +110,11 @@ public class TabDetailPager extends BaseMenuDetailPager {
         mTopNewsList = newsTab.data.topnews;
         if (mTopNewsList != null) {
             mViewPager.setAdapter(new TopNewsAdapter());
-            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            //将圆形指示器绑定到ViewPager
+            mIndicator.setViewPager(mViewPager);
+            mIndicator.setSnap(true);   //快照展示方式
+            mIndicator.onPageSelected(0); //将圆点位置归零，保证页面和圆点同步
+            mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
