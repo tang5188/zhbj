@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -42,6 +43,8 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
     @ViewInject(R.id.vp_tab_detail)
     private TopNewsViewPager mViewPager;
+    @ViewInject(R.id.tv_title)
+    private TextView tvTitle;
 
     public TabDetailPager(Activity activity, NewsMenu.NewsTabData newsTabData) {
         super(activity);
@@ -104,6 +107,27 @@ public class TabDetailPager extends BaseMenuDetailPager {
         mTopNewsList = newsTab.data.topnews;
         if (mTopNewsList != null) {
             mViewPager.setAdapter(new TopNewsAdapter());
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    //更新头条新闻的标题
+                    tvTitle.setText(mTopNewsList.get(position).title);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+            //初始化第一页头条新闻的标题
+            if (mTopNewsList.size() > 0) {
+                tvTitle.setText(mTopNewsList.get(0).title);
+            }
         }
     }
 
