@@ -33,6 +33,7 @@ import zhbj.itcast.com.zhbj.domain.NewsMenu;
 import zhbj.itcast.com.zhbj.domain.NewsTab;
 import zhbj.itcast.com.zhbj.global.GlobalConstants;
 import zhbj.itcast.com.zhbj.utils.CacheUtils;
+import zhbj.itcast.com.zhbj.view.RefreshListView;
 import zhbj.itcast.com.zhbj.view.TopNewsViewPager;
 
 /**
@@ -54,7 +55,7 @@ public class TabDetailPager extends BaseMenuDetailPager {
     @ViewInject(R.id.indicator)
     private CirclePageIndicator mIndicator;
     @ViewInject(R.id.lv_list)
-    private ListView lvList;
+    private RefreshListView lvList;
 
     public TabDetailPager(Activity activity, NewsMenu.NewsTabData newsTabData) {
         super(activity);
