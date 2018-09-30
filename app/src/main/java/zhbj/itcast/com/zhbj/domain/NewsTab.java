@@ -12,7 +12,7 @@ public class NewsTab {
     public class NewsTabData {
         public String more;
         public ArrayList<TopNews> topnews;
-        public ArrayList<TopNews> news;
+        public ArrayList<News> news;
 
         @Override
         public String toString() {

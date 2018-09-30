@@ -8,7 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+
+import javax.net.ssl.HostnameVerifier;
 
 import zhbj.itcast.com.zhbj.R;
 import zhbj.itcast.com.zhbj.base.BaseMenuDetailPager;
@@ -40,6 +44,7 @@ public class TabDetailPager extends BaseMenuDetailPager {
     //当前页签的网络数据
     private NewsMenu.NewsTabData newsTabData;
     private ArrayList<NewsTab.TopNews> mTopNewsList;
+    private ArrayList<NewsTab.News> mNewsList;
     private String mUrl;
 
     @ViewInject(R.id.vp_tab_detail)
@@ -48,6 +53,8 @@ public class TabDetailPager extends BaseMenuDetailPager {
     private TextView tvTitle;
     @ViewInject(R.id.indicator)
     private CirclePageIndicator mIndicator;
+    @ViewInject(R.id.lv_list)
+    private ListView lvList;
 
     public TabDetailPager(Activity activity, NewsMenu.NewsTabData newsTabData) {
         super(activity);
@@ -136,6 +143,12 @@ public class TabDetailPager extends BaseMenuDetailPager {
                 tvTitle.setText(mTopNewsList.get(0).title);
             }
         }
+
+        //初始化新闻列表数据
+        mNewsList = newsTab.data.news;
+        if (mNewsList != null) {
+            lvList.setAdapter(new NewsAdapter());
+        }
     }
 
     //头条新闻的数据解析适配器
@@ -181,5 +194,61 @@ public class TabDetailPager extends BaseMenuDetailPager {
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView((View) object);
         }
+    }
+
+    //新闻列表适配器
+    class NewsAdapter extends BaseAdapter {
+
+        private ImageOptions imageOptions = null;
+
+        public NewsAdapter() {
+            imageOptions = new ImageOptions.Builder()
+                    .setLoadingDrawableId(R.drawable.pic_item_list_default)
+                    .build();
+        }
+
+        @Override
+        public int getCount() {
+            return mNewsList.size();
+        }
+
+        @Override
+        public NewsTab.News getItem(int position) {
+            return mNewsList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = View.inflate(mActivity, R.layout.list_item_news, null);
+
+                holder = new ViewHolder();
+                holder.ivIcon = convertView.findViewById(R.id.iv_icon);
+                holder.tvTitle = convertView.findViewById(R.id.tv_title);
+                holder.tvTime = convertView.findViewById(R.id.tv_time);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            NewsTab.News info = getItem(position);
+            holder.tvTitle.setText(info.title);
+            holder.tvTime.setText(info.pubdate);
+            x.image().bind(holder.ivIcon, info.listimage, imageOptions);
+
+            return convertView;
+        }
+    }
+
+    static class ViewHolder {
+        public ImageView ivIcon;
+        public TextView tvTitle;
+        public TextView tvTime;
     }
 }
