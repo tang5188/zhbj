@@ -66,7 +66,13 @@ public class TabDetailPager extends BaseMenuDetailPager {
     @Override
     public View initViews() {
         View view = View.inflate(mActivity, R.layout.pager_tab_detail, null);
+        //加载头条新闻的头布局
+        View headerView = View.inflate(mActivity, R.layout.list_item_header, null);
+
         x.view().inject(this, view);
+        x.view().inject(this, headerView);
+
+        lvList.addHeaderView(headerView);   //给listView添加头布局
 
         return view;
     }
