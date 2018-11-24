@@ -4,7 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import zhbj.itcast.com.zhbj.R;
 
@@ -23,6 +27,14 @@ public class RefreshListView extends ListView {
     //默认是下拉刷新状态
     private int mCurrentState = STATE_PULL_TO_REFRESH;
 
+    private TextView tvState;
+    private TextView tvTime;
+    private ImageView ivArrow;
+    private ProgressBar pbLoading;
+
+    private RotateAnimation animUp;
+    private RotateAnimation animDown;
+
     public RefreshListView(Context context) {
         this(context, null);
     }
@@ -40,6 +52,12 @@ public class RefreshListView extends ListView {
     private void initHeaderView() {
         mHeaderView = View.inflate(getContext(), R.layout.pull_to_refresh_header, null);
         addHeaderView(mHeaderView); //给listView添加头布局
+
+        tvState = findViewById(R.id.tv_state);
+        tvTime = findViewById(R.id.tv_time);
+        ivArrow = findViewById(R.id.iv_arrow);
+        pbLoading = findViewById(R.id.pb_loading);
+        initArrowAnim();
 
         //隐藏头布局
         //获取头布局高度，设置负padingTop
@@ -64,6 +82,12 @@ public class RefreshListView extends ListView {
                 }
                 int endY = (int) ev.getY();
                 int dy = endY - startY;
+
+                //如果正在刷新，什么都不做
+                if (mCurrentState == STATE_REFRESHING) {
+                    break;
+                }
+
                 int firstVisiblePosition = this.getFirstVisiblePosition();  //当前显示的第一个item的位置
                 if (dy > 0 && firstVisiblePosition == 0) {
                     //下拉动作，并且当前的listview的顶部
@@ -92,9 +116,12 @@ public class RefreshListView extends ListView {
                 if (mCurrentState == STATE_RELEASE_TO_REFRESH) {
                     //切换成正在刷新
                     mCurrentState = STATE_REFRESHING;
+                    //显示刷新控件
+                    mHeaderView.setPadding(0, 0, 0, 0);
                     refreshState();
                 } else if (mCurrentState == STATE_PULL_TO_REFRESH) {
                     //隐藏刷新控件
+                    mHeaderView.setPadding(0, -measuredHeight, 0, 0);
                 }
                 break;
             default:
@@ -103,8 +130,39 @@ public class RefreshListView extends ListView {
         return super.onTouchEvent(ev);
     }
 
+    private void initArrowAnim() {
+        animUp = new RotateAnimation(0, -180, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+        animUp.setDuration(500);
+        animUp.setFillAfter(true);  //保持住动画结束的状态
+
+        animDown = new RotateAnimation(-180, 0, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+        animDown.setDuration(500);
+        animDown.setFillAfter(true);  //保持住动画结束的状态
+    }
+
     //根据当前状态刷新界面
     private void refreshState() {
-
+        switch (mCurrentState) {
+            case STATE_PULL_TO_REFRESH:
+                tvState.setText("下拉刷新");
+                pbLoading.setVisibility(View.INVISIBLE);
+                ivArrow.setVisibility(View.VISIBLE);
+                ivArrow.startAnimation(animDown);
+                break;
+            case STATE_RELEASE_TO_REFRESH:
+                tvState.setText("松开刷新");
+                pbLoading.setVisibility(View.INVISIBLE);
+                ivArrow.setVisibility(View.VISIBLE);
+                ivArrow.startAnimation(animUp);
+                break;
+            case STATE_REFRESHING:
+                tvState.setText("正在刷新...");
+                pbLoading.setVisibility(View.VISIBLE);
+                ivArrow.clearAnimation();
+                ivArrow.setVisibility(View.INVISIBLE);
+                break;
+            default:
+                break;
+        }
     }
 }
