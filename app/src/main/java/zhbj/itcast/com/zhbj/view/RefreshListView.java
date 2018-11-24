@@ -16,6 +16,13 @@ public class RefreshListView extends ListView {
     private View mHeaderView;
     private int measuredHeight;
 
+    private static final int STATE_PULL_TO_REFRESH = 0;
+    private static final int STATE_RELEASE_TO_REFRESH = 1;
+    private static final int STATE_REFRESHING = 2;
+
+    //默认是下拉刷新状态
+    private int mCurrentState = STATE_PULL_TO_REFRESH;
+
     public RefreshListView(Context context) {
         this(context, null);
     }
@@ -61,16 +68,43 @@ public class RefreshListView extends ListView {
                 if (dy > 0 && firstVisiblePosition == 0) {
                     //下拉动作，并且当前的listview的顶部
                     int padding = -this.measuredHeight + dy;
+
+                    if (padding > 0 &&
+                            mCurrentState != STATE_RELEASE_TO_REFRESH) {
+                        //切换到松开刷新状态
+                        mCurrentState = STATE_RELEASE_TO_REFRESH;
+                        refreshState();
+                    } else if (padding <= 0 &&
+                            mCurrentState != STATE_PULL_TO_REFRESH) {
+                        //切换到下拉刷新状态
+                        mCurrentState = STATE_PULL_TO_REFRESH;
+                        refreshState();
+                    }
+                    //通过修改padding来设置当前刷新控件的最新位置
                     mHeaderView.setPadding(0, padding, 0, 0);
                     //消费此事件，处理下拉刷新控件的滑动，不需要listview原生效果参与
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                startY = -1;
+
+                if (mCurrentState == STATE_RELEASE_TO_REFRESH) {
+                    //切换成正在刷新
+                    mCurrentState = STATE_REFRESHING;
+                    refreshState();
+                } else if (mCurrentState == STATE_PULL_TO_REFRESH) {
+                    //隐藏刷新控件
+                }
                 break;
             default:
                 break;
         }
         return super.onTouchEvent(ev);
+    }
+
+    //根据当前状态刷新界面
+    private void refreshState() {
+
     }
 }
