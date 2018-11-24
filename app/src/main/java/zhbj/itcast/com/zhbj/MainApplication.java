@@ -9,6 +9,6 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         x.Ext.init(this);
-        x.Ext.setDebug(true);
+        x.Ext.setDebug(false);
     }
 }
