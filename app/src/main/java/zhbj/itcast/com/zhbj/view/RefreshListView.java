@@ -23,6 +23,9 @@ public class RefreshListView extends ListView {
     private View mHeaderView;
     private int measuredHeight;
 
+    private View mFooterView;
+    private int mFooterViewHeight;
+
     private static final int STATE_PULL_TO_REFRESH = 0;
     private static final int STATE_RELEASE_TO_REFRESH = 1;
     private static final int STATE_REFRESHING = 2;
@@ -49,6 +52,7 @@ public class RefreshListView extends ListView {
     public RefreshListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initHeaderView();
+        initFooterView();
     }
 
     //初始化头布局
@@ -60,8 +64,6 @@ public class RefreshListView extends ListView {
         tvTime = findViewById(R.id.tv_time);
         ivArrow = findViewById(R.id.iv_arrow);
         pbLoading = findViewById(R.id.pb_loading);
-        initArrowAnim();
-        setRefreshTime();
 
         //隐藏头布局
         //获取头布局高度，设置负padingTop
@@ -69,6 +71,19 @@ public class RefreshListView extends ListView {
         mHeaderView.measure(0, 0);   //手动测量，传值为0，表示由系统决定测量
         this.measuredHeight = mHeaderView.getMeasuredHeight();
         mHeaderView.setPadding(0, -this.measuredHeight, 0, 0);
+
+        initArrowAnim();
+        setRefreshTime();
+    }
+
+    //初始化脚布局
+    private void initFooterView() {
+        mFooterView = View.inflate(getContext(), R.layout.pull_to_refresh_footer, null);
+        addFooterView(mFooterView);
+
+        mFooterView.measure(0, 0);
+        mFooterViewHeight = mFooterView.getMeasuredHeight();
+        mFooterView.setPadding(0, -this.mFooterViewHeight, 0, 0);
     }
 
     private int startY = -1;
