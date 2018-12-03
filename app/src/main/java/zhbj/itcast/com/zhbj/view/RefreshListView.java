@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.RotateAnimation;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -18,7 +19,7 @@ import zhbj.itcast.com.zhbj.R;
 /**
  * 下拉刷新的ListView
  */
-public class RefreshListView extends ListView {
+public class RefreshListView extends ListView implements AbsListView.OnScrollListener {
 
     private View mHeaderView;
     private int measuredHeight;
@@ -84,6 +85,9 @@ public class RefreshListView extends ListView {
         mFooterView.measure(0, 0);
         mFooterViewHeight = mFooterView.getMeasuredHeight();
         mFooterView.setPadding(0, -this.mFooterViewHeight, 0, 0);
+
+        //设置滑动监听
+        setOnScrollListener(this);
     }
 
     private int startY = -1;
@@ -222,4 +226,27 @@ public class RefreshListView extends ListView {
         String time = format.format(new Date());
         tvTime.setText(time);
     }
+
+    // region 滑动监听
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == SCROLL_STATE_IDLE) {     //空闲状态
+            int lastVisiblePosition = getLastVisiblePosition();     //当前显示的最后一个item的位置
+            if (lastVisiblePosition == getCount() - 1) {
+                System.out.println("到底了...");
+
+                //显示加载中
+                mFooterView.setPadding(0, 0, 0, 0);
+                setSelection(getCount() - 1);   //显示在最后一个item的位置（展示加载中布局）
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+    }
+
+    // endregion
 }
