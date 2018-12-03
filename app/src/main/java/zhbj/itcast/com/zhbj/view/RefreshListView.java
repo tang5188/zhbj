@@ -160,9 +160,37 @@ public class RefreshListView extends ListView {
                 pbLoading.setVisibility(View.VISIBLE);
                 ivArrow.clearAnimation();
                 ivArrow.setVisibility(View.INVISIBLE);
+
+                //回调下拉刷新
+                if (mListener != null) {
+                    mListener.OnRefresh();
+                }
+
                 break;
             default:
                 break;
         }
+    }
+
+    //刷新结束，隐藏控件
+    public void OnRefreshComplete() {
+        mHeaderView.setPadding(0, -this.measuredHeight, 0, 0);
+        //所有变量状态归为初始化
+        tvState.setText("下拉刷新");
+        pbLoading.setVisibility(View.INVISIBLE);
+        ivArrow.setVisibility(View.VISIBLE);
+        mCurrentState = STATE_PULL_TO_REFRESH;
+    }
+
+    private OnRefreshListener mListener;
+
+    public void setOnRefreshListener(OnRefreshListener listener) {
+        mListener = listener;
+    }
+
+    //回调接口，通知回调状态
+    public interface OnRefreshListener {
+        //下拉刷新的回调接口
+        public void OnRefresh();
     }
 }

@@ -75,6 +75,15 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
         lvList.addHeaderView(headerView);   //给listView添加头布局
 
+        //设置下拉刷新的监听
+        lvList.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
+            @Override
+            public void OnRefresh() {
+                System.out.println("下拉刷新...");
+                getDataFromServer();
+            }
+        });
+
         return view;
     }
 
@@ -94,6 +103,8 @@ public class TabDetailPager extends BaseMenuDetailPager {
             @Override
             public void onSuccess(String result) {
                 processData(result);
+
+                System.out.println("result:" + result);
                 CacheUtils.setCache(mActivity, mUrl, result);
             }
 
@@ -109,7 +120,8 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
             @Override
             public void onFinished() {
-
+                //隐藏下拉刷新控件
+                lvList.OnRefreshComplete();
             }
         });
     }
