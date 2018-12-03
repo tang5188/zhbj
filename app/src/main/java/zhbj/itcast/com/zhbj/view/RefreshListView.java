@@ -10,6 +10,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import zhbj.itcast.com.zhbj.R;
 
 /**
@@ -58,6 +61,7 @@ public class RefreshListView extends ListView {
         ivArrow = findViewById(R.id.iv_arrow);
         pbLoading = findViewById(R.id.pb_loading);
         initArrowAnim();
+        setRefreshTime();
 
         //隐藏头布局
         //获取头布局高度，设置负padingTop
@@ -180,6 +184,9 @@ public class RefreshListView extends ListView {
         pbLoading.setVisibility(View.INVISIBLE);
         ivArrow.setVisibility(View.VISIBLE);
         mCurrentState = STATE_PULL_TO_REFRESH;
+
+        //更新刷新时间
+        setRefreshTime();
     }
 
     private OnRefreshListener mListener;
@@ -192,5 +199,12 @@ public class RefreshListView extends ListView {
     public interface OnRefreshListener {
         //下拉刷新的回调接口
         public void OnRefresh();
+    }
+
+    //设置刷新的时间
+    private void setRefreshTime() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = format.format(new Date());
+        tvTime.setText(time);
     }
 }
